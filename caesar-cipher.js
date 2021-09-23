@@ -1,11 +1,10 @@
 // encrypts a string using the caesar cipher
 
 const originalMessage = 'attack from the north at dawn';
-const originalArray = Array.from(originalMessage);
+// const originalArray = Array.from(originalMessage);
 const key = 5;
-let numberMessage =[];
-let cipherNumberMessage = [];
-let cipherArray = [];
+// let cipherNumberMessage = [];
+// let cipherArray = [];
 
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -24,21 +23,28 @@ alphabet.forEach((letter, index) => {
   alphabetObject[letter] = index;
 })
 
+function convertToArray(message) {
+  message = message.toLowerCase();
+  let messageArray = Array.from(message);
+  return messageArray;
+}
+
 // converts original message array to numbered values
-function convertToNumbers(originalArray) {
-  originalArray.forEach(character => {
+function convertToNumbers(messageArray) {
+  let numberMessage = [];
+  messageArray.forEach(character => {
     if (character in alphabetObject) {
       numberMessage.push(alphabetObject[character]);
     } else {
       numberMessage.push(character);
     }
   })
+  return numberMessage;
 }
-
-convertToNumbers(originalArray);
 
 // applies key to numbered message to get new values
 function applyKey(numberMessage) {
+  let cipherNumberMessage = [];
   numberMessage.forEach(element => {
     if (!Number.isInteger(element)) {
       cipherNumberMessage.push(element);
@@ -50,12 +56,12 @@ function applyKey(numberMessage) {
       cipherNumberMessage.push(element + key)
     }
   })
+  return cipherNumberMessage;
 }
 
-applyKey(numberMessage);
-
 // converts the array of enciphered numbers back their corresponding letters
-function caesarCipher(cipherNumberMessage) {
+function convertToLetters(cipherNumberMessage) {
+  let cipherArray = [];
   cipherNumberMessage.forEach(element => {
     if (!Number.isInteger(element)) {
       cipherArray.push(element);
@@ -67,6 +73,13 @@ function caesarCipher(cipherNumberMessage) {
   return cipherMessage;
 }
 
-caesarCipher(cipherNumberMessage);
+function caesarCipher(message) {
+  let messageArray = convertToArray(message);
+  let numberMessage = convertToNumbers(messageArray);
+  let cipherNumberMessage = applyKey(numberMessage);
+  return convertToLetters(cipherNumberMessage);
+}
+
+caesarCipher(originalMessage);
 
 module.exports = caesarCipher;
