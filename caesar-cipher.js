@@ -45,12 +45,19 @@ function convertToNumbers(messageArray) {
 function applyKey(numberMessage) {
   let cipherNumberMessage = [];
   numberMessage.forEach(element => {
+    
+    //if the element is not a letter, just add it as-is to the new array
     if (!Number.isInteger(element)) {
       cipherNumberMessage.push(element);
+
+      // if the target number would be shifted beyond 'z' (25)
+      // instead, continue shifting up from 'a' (0) to target number
     } else if (element > (25 - key)) {
       let total = (element + key) - 25;
       let newNumber = 0 + (total - 1);
       cipherNumberMessage.push(newNumber);
+
+      // otherwise just add the shifted number
     } else {
       cipherNumberMessage.push(element + key)
     }
@@ -65,9 +72,13 @@ function convertToLetters(cipherNumberMessage) {
     if (!Number.isInteger(element)) {
       cipherArray.push(element);
     } else {
-      cipherArray.push(Object.keys(alphabetObject).find(key => alphabetObject[key] === element));
+      // using the alphabetObject, add the corresponding key (letter)
+      // from the target value (number) to the new array
+      cipherArray.push(Object.keys(alphabetObject)
+        .find(key => alphabetObject[key] === element));
     }
   })
+  // convert the array to a string
   let cipherMessage = cipherArray.join('');
   return cipherMessage;
 }
