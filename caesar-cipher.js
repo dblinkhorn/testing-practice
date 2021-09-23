@@ -2,9 +2,10 @@
 
 const originalMessage = 'attack from the north at dawn';
 const originalArray = Array.from(originalMessage);
-const key = 1;
+const key = 5;
 let numberMessage =[];
 let cipherNumberMessage = [];
+let cipherArray = [];
 
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -23,34 +24,49 @@ alphabet.forEach((letter, index) => {
   alphabetObject[letter] = index;
 })
 
-
 // converts original message array to numbered values
-function convertToNumbers(originalMessageArray) {
-  originalMessageArray.forEach(character => {
+function convertToNumbers(originalArray) {
+  originalArray.forEach(character => {
     if (character in alphabetObject) {
       numberMessage.push(alphabetObject[character]);
+    } else {
+      numberMessage.push(character);
     }
   })
 }
 
 convertToNumbers(originalArray);
 
-console.log(numberMessage);
-
 // applies key to numbered message to get new values
-function applyCipher(numberMessage) {
-  numberMessage.forEach(number => {
-    if (number > (25 - key)) {
-      let total = number + key;
+function applyKey(numberMessage) {
+  numberMessage.forEach(element => {
+    if (!Number.isInteger(element)) {
+      cipherNumberMessage.push(element);
+    } else if (element > (25 - key)) {
+      let total = (element + key) - 25;
       let newNumber = 0 + (total - 1);
       cipherNumberMessage.push(newNumber);
+    } else {
+      cipherNumberMessage.push(element + key)
     }
-    cipherNumberMessage.push(number + key)
   })
 }
 
-applyCipher(numberMessage);
+applyKey(numberMessage);
 
-console.log(cipherNumberMessage);
+// converts the array of enciphered numbers back their corresponding letters
+function caesarCipher(cipherNumberMessage) {
+  cipherNumberMessage.forEach(element => {
+    if (!Number.isInteger(element)) {
+      cipherArray.push(element);
+    } else {
+      cipherArray.push(Object.keys(alphabetObject).find(key => alphabetObject[key] === element));
+    }
+  })
+  let cipherMessage = cipherArray.join('');
+  return cipherMessage;
+}
+
+caesarCipher(cipherNumberMessage);
 
 module.exports = caesarCipher;
